@@ -25,10 +25,10 @@
 
 ; Problem 71
 
-(DEFTHM LEMMA1-71
-        (IMPLIES (AND (CONSP X) (EQUAL X Y))
-                 (EQUAL (CDR X) (CDR Y)))
-        :INSTRUCTIONS (:PROMOTE :S-PROP))
+;(DEFTHM LEMMA1-71
+;        (IMPLIES (AND (CONSP X) (EQUAL X Y))
+;                 (EQUAL (CDR X) (CDR Y)))
+;        :INSTRUCTIONS (:PROMOTE :S-PROP))
 
 
 (DEFTHM PROBLEM71
@@ -115,4 +115,155 @@
 ;-------------------------------------------------
 
 ;problem 73
+
+(DEFTHM LEMMA1-73
+        (IMPLIES (NOT (CONSP Y))
+                 (EQUAL (PLUS X Y) (MAPNIL X)))
+        :INSTRUCTIONS (:INDUCT (:DV 2 1)
+                               :EXPAND :S-PROP :TOP :PROMOTE (:DV 1)
+                               :EXPAND :S-PROP :UP (:DV 2)
+                               :EXPAND :S-PROP (:DV 2 1)
+                               :EXPAND :S-PROP :UP (:DV 2)
+                               :EXPAND
+                               :S-PROP :UP (:REWRITE CONS-EQUAL)
+                               :TOP (:DEMOTE 2)
+                               :S-PROP))
+
+(DEFTHM LEMMA2-73
+        (EQUAL (CONS NIL (PLUS I J))
+               (PLUS I (CONS X J)))
+        :INSTRUCTIONS (:INDUCT (:DV 1 2)
+                               :EXPAND :S-PROP :TOP (:DV 2)
+                               :EXPAND
+                               :S-PROP :EXPAND :S-PROP (:DV 2 1)
+                               (:REWRITE CDR-CONS)
+                               :TOP :S-PROP (:DV 1 2)
+                               :EXPAND :S-PROP :TOP (:DV 2)
+                               :EXPAND
+                               :S-PROP :TOP (:REWRITE CONS-EQUAL)
+                               :S-PROP))
+
+
+(DEFTHM LEMMA3-73
+        (IMPLIES (CONSP Y)
+                 (EQUAL (PLUS X (CONS I (CDR Y)))
+                        (PLUS X Y)))
+        :INSTRUCTIONS (:INDUCT :PROMOTE (:DV 1)
+                               :EXPAND
+                               :S-PROP :EXPAND :S-PROP (:DV 2 1)
+                               (:REWRITE CDR-CONS)
+                               :TOP (:DV 2)
+                               :EXPAND :S-PROP
+                               :EXPAND :S-PROP :TOP :S-PROP (:DV 2 1)
+                               :EXPAND :S-PROP :UP (:DV 2)
+                               :EXPAND
+                               :S-PROP :UP (:REWRITE CONS-EQUAL)
+                               :TOP (:DEMOTE 2)
+                               :S-PROP))
+
+
+(DEFTHM PROBLEM73 (EQUAL (PLUS I J) (PLUS J I))
+        :INSTRUCTIONS (:INDUCT (:DV 1)
+                               :EXPAND :S-PROP :UP (:DV 2)
+                               :EXPAND :TOP :SPLIT (:DV 2 2)
+                               (:REWRITE LEMMA1-73)
+                               :TOP (:DV 1)
+                               :EXPAND :S-PROP :TOP :S-PROP (:DV 1)
+                               :EXPAND :S-PROP :UP (:DV 2)
+                               :EXPAND :S-PROP (:DV 1)
+                               :TOP (:DV 1)
+                               :EXPAND :S-PROP :TOP (:DV 2)
+                               :EXPAND
+                               :TOP :SPLIT (:REWRITE CONS-EQUAL)
+                               (:DV 1)
+                               :TOP (:DV 1)
+                               :TOP (:DV 2)
+                               (:DV 1)
+                               :TOP :S-PROP (:DV 1)
+                               :EXPAND :S-PROP :TOP (:DV 1)
+                               (:REWRITE LEMMA2-73)
+                               :TOP (:DV 1)
+                               (:REWRITE LEMMA3-73)
+                               :TOP :S-PROP (:DV 1 2)
+                               :EXPAND
+                               :S-PROP :UP
+                               :UP (:DV 2)
+                               :EXPAND :S-PROP
+                               :TOP :S-PROP))
+
+;-------------------------------------------------
+
+;problem 74
+
+
+(DEFTHM LEMMA1-74
+        (EQUAL (TIMES (MAPNIL B) C) (TIMES B C))
+        :INSTRUCTIONS (:INDUCT (:DV 1 1)
+                               :EXPAND
+                               :S-PROP :UP :EXPAND :S-PROP :UP (:DV 2)
+                               :EXPAND :S-PROP (:DV 1)
+                               (:DV 1)
+                               :EXPAND
+                               :S-PROP :UP :EXPAND :S-PROP (:DV 2 1)
+                               (:REWRITE CDR-CONS)
+                               :UP :UP (:REWRITE PROBLEM73)
+                               :TOP (:DV 2)
+                               :EXPAND
+                               :S-PROP (:REWRITE PROBLEM73)
+                               :TOP :S-PROP))
+
+
+(DEFTHM LEMMA2-74
+        (EQUAL (MAPNIL (TIMES B C)) (TIMES B C))
+        :INSTRUCTIONS (:INDUCT (:DV 1 1)
+                               :EXPAND
+                               :S-PROP :UP :EXPAND :S-PROP :UP (:DV 2)
+                               :EXPAND :S-PROP (:DV 1 1)
+                               :EXPAND :S-PROP (:REWRITE PROBLEM73)
+                               :UP (:REWRITE LEMMA3-72)
+                               :TOP (:DV 2)
+                               :EXPAND
+                               :S-PROP (:REWRITE PROBLEM73)
+                               :TOP :S-PROP))
+
+
+(DEFTHM LEMMA3-74
+        (EQUAL (TIMES (PLUS A B) C)
+               (PLUS (TIMES A C) (TIMES B C)))
+        :INSTRUCTIONS (:INDUCT (:DV 1 1)
+                               :EXPAND :S-PROP :TOP (:DV 2 1)
+                               :EXPAND
+                               :S-PROP :UP :EXPAND :S-PROP :TOP (:DV 1)
+                               (:REWRITE LEMMA1-74)
+                               :TOP (:DV 2)
+                               (:REWRITE LEMMA2-74)
+                               :TOP :S-PROP (:DV 1 1)
+                               :EXPAND
+                               :S-PROP :UP :EXPAND :S-PROP (:DV 2 1)
+                               (:REWRITE CDR-CONS)
+                               :UP :UP (:REWRITE PROBLEM73)
+                               :TOP (:DV 2 1)
+                               :EXPAND :S-PROP :UP (:REWRITE PROBLEM72)
+                               (:REWRITE PROBLEM73)
+                               :TOP :S-PROP))
+
+
+(DEFTHM PROBLEM74
+        (EQUAL (TIMES (TIMES I J) K)
+               (TIMES I (TIMES J K)))
+        :INSTRUCTIONS (:INDUCT (:DV 1 1)
+                               :EXPAND
+                               :S-PROP :UP :EXPAND :S-PROP :UP (:DV 2)
+                               :EXPAND :S-PROP (:DV 1 1)
+                               :EXPAND :S-PROP :UP :TOP (:DV 2)
+                               :EXPAND :S-PROP :TOP (:DV 1)
+                               (:REWRITE LEMMA3-74)
+                               (:REWRITE PROBLEM73)
+                               :TOP (:DV 2)
+                               (:REWRITE PROBLEM73)
+                               :TOP :S-PROP))
+
+
+
+
 
