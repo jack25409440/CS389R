@@ -1,0 +1,103 @@
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{amsmath}
+\usepackage{cases}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{grffile}
+\usepackage{setspace}
+\usepackage{listings}
+
+
+%\setlength\parindent{0pt}
+
+\author{Xiaohui Chen \\Department of Computer Science\\ The University of Texas at Austin }
+\title{CS 389R Project Proposal}
+\date{\vspace{-5ex}}
+
+\begin{document}
+\maketitle
+
+\begin{spacing}{1.0}
+
+Electrons in atoms have different states. Each state can be represented by a set of quantum numbers in ket notation: $|n\ l\ m_l\ m_s \rangle$. Here $n$, $l$, $m_l$, $m_s$ represent principle quantum number, azimuthal quantum number, magnetic quantum number and spin projection quantum number respectively.
+
+In quantum physics, the Clebsch-Gordan coefficients are sets of number that arise in angular momentum coupling. As for electrons, $\vec{l}$ is the angular momentum and $\vec{s}$ is the spin. We let $\vec{j}= \vec{l}+ \vec{s}$, where $\vec{j}$ is the total angular momentum. Therefore for any given state $|j\ m_j \rangle$, angular momentum $l$ and spin $s$,a Clebsch-Gordan coefficient $C_{m_l,m_s}$ indicates the probability of finding such electron in state $|l\ m_l\rangle |s\ m_s\rangle$. The Clebsch-Gordan coefficients could be calculated using the lowering operator method.
+
+The raising and lowering operator $L_{\pm}$, $S_{\pm}$ obey the following properties:
+
+\begin{equation}
+L_{\pm} |l\ m_l \rangle = \hbar \sqrt{l(l+1)-m_l(m_l \pm 1)} |l\ (m_l \pm 1) \rangle
+\label{l}
+\end{equation}
+
+
+\begin{equation}
+S_{\pm} |s\ m_s \rangle = \hbar \sqrt{s(s+1)-m_s(m_s \pm 1)} |s\ (m_s\pm 1) \rangle
+\label{s}
+\end{equation}
+
+Since $\vec{j}= \vec{l}+ \vec{s}$, $J_{\pm}$ obeys the following properties:
+
+\begin{equation}
+J_{\pm}= L_{\pm} + S_{\pm}
+\label{jsum}
+\end{equation}
+
+\begin{equation}
+J_{\pm} |j\ m_j \rangle = \hbar \sqrt{j(j+1)-m_j(m_j \pm 1)} |s\ (m_j \pm 1) \rangle
+\label{j}
+\end{equation}
+
+Therefore a state can be written as 
+
+\begin{equation}
+|j\ m_j \rangle= \sum\limits_{m_l+m_s=m_j} C_{m_l m_s m_j}^{l s j} |l\ m_l \rangle |s\ m_s \rangle \label{sum}
+\end{equation}
+
+In equation \ref{sum}, the set of $C_{m_l m_s m_j}^{l s j}$ is a set of Clebsch-Gordan coefficients. The first task of this project is to use ACL2 to compare each $C_{m_l m_s m_j}^{l s j}$ with the Clebsch-Gordan coefficient table to verify its correctness. The required functions for using lowering operators will also be implemented in ACL2.
+
+Using the raising and lowering operator described above, for each state $|j\ m_j \rangle$, we can get a complete set shown in equation \ref{sum}. See attachment for an example.
+
+Since each $|C_{m_l m_s m_j}^{l s j}|^2$ means the probability of finding such an electron in state $|l\ m_l \rangle |s\ m_s \rangle$ and the states are exhaustive, $\sum\limits_{m_l+m_s=m_j} \left| C_{m_l m_s m_j}^{l s j} \right|^2=1$ must be true. Therefore the second task of this project is to use ACL2 to verify such theorem.
+
+\clearpage
+
+\end{spacing}
+
+\section*{Attachment}
+
+\begin{spacing}{2.0}
+
+Example:
+
+We have an electron with angular momentum $l=1$ and spin $s=\frac{1}{2}$
+
+Therefore $m_l=-1,0,-1$ and $m_s= \pm \frac{1}{2}$
+
+This means $j=\frac{3}{2}$ and $m_j= -\frac{3}{2}, - \frac{1}{2}, \frac{1}{2}, \frac{3}{2}$
+
+We know that the only possibility of forming $|j\ m_j\rangle= |\frac{3}{2}\ \frac{3}{2}\rangle$ is $|\frac{3}{2}\ \frac{3}{2}\rangle = |1\ 1\rangle |\frac{1}{2}\ \frac{1}{2}\rangle $. This is an instance of equation $\ref{sum}$
+
+Applying the lowering operator on the above equation
+
+$J_{-}|\frac{3}{2}\ \frac{3}{2}\rangle =  \hbar \sqrt{\frac{3}{2} \left( \frac{3}{2}+1 \right) -  \frac{3}{2} \left( \frac{3}{2}-1 \right)} |\frac{3}{2}\ \frac{1}{2}\rangle = \sqrt{3} \hbar |\frac{3}{2}\ \frac{1}{2}\rangle$
+
+$J_{-} |1\ 1\rangle |\frac{1}{2}\ \frac{1}{2}\rangle = (L_{-}+ S_{-}) |1\ 1\rangle |\frac{1}{2}\ \frac{1}{2}\rangle= L_{-}|1\ 1\rangle |\frac{1}{2}\ \frac{1}{2}\rangle + |1\ 1\rangle S_{-} |\frac{1}{2}\ \frac{1}{2}\rangle = \hbar\sqrt{1(1+1)-1(1-1)} |1\ 0\rangle |\frac{1}{2}\ \frac{1}{2}\rangle + \hbar \sqrt{\frac{1}{2} \left( \frac{1}{2}+1 \right) -  \frac{1}{2} \left( \frac{1}{2}-1 \right)} |1\ 1\rangle |\frac{1}{2}\ -\frac{1}{2}\rangle = \hbar \sqrt{2} |1\ 0\rangle |\frac{1}{2}\ \frac{1}{2}\rangle + \hbar |1\ 1\rangle |\frac{1}{2}\ -\frac{1}{2}\rangle$
+
+$\sqrt{3} \hbar |\frac{3}{2}\ \frac{1}{2}\rangle = \hbar \sqrt{2} |1\ 0\rangle |\frac{1}{2}\ \frac{1}{2}\rangle + \hbar |1\ 1\rangle |\frac{1}{2}\ -\frac{1}{2}\rangle$
+
+$\therefore |\frac{3}{2}\ \frac{1}{2}\rangle = \sqrt{\frac{2}{3}} |1\ 0\rangle |\frac{1}{2}\ \frac{1}{2}\rangle + \frac{1}{\sqrt{3}} |1\ 1\rangle |\frac{1}{2}\ -\frac{1}{2}\rangle$
+
+The coefficients match the Clebsch-Gordan coefficient table
+
+We can apply the lowering operator again on the above equation to get further results
+
+The sum of probabilities is $\frac{2}{3}+ \frac{1}{3} = 1$. Therefore the lowering operator method is correct when $l=1$ and $s=\frac{1}{2}$
+
+The task is to verify the lowering operator method is correct for all allowed $l$ and $s$
+
+\end{spacing}
+\end{document}
