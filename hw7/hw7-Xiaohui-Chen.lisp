@@ -72,16 +72,39 @@
 	(cons b nil)
 	(cons (car a) (affix-v (cdr a) b))))
 
-(defun nat-to-v-big (x)
-    (declare (xargs :guard (natp x)))
-    (if (<= (nfix x) 1)
-	(cons (if (= (rem-2 x) 1) t nil) nil)
-	    (affix-v (nat-to-v-big (div-2 x))
-	             (if (= (rem-2 x) 1) t nil))))
+(defun nat-to-v-big (x l)
+    (declare (xargs :guard (and (natp x)
+				(natp l))))
+    (if (zp l)
+	nil
+        (if (<= (nfix l) 1)
+	    (cons (if (= (rem-2 x) 1) t nil) nil)
+	    (affix-v (nat-to-v-big (div-2 x) (1- l))
+	             (if (= (rem-2 x) 1) t nil)))))
+
+;calculate the length of bit string
+
+(defun length-binary-nat (x)
+	(declare (xargs :guard (natp x)))
+	(if (zp x)
+	    0
+	    (+ 1 (length-binary-nat (div-2 x)))))
+
+(defthm length-valid 
+	(implies (natp x)
+		 (= (len (nat-to-v-big x (length-binary-nat x)))
+	            (length-binary-nat x))))
+
+(defthm v-to-nat-of-nat-to-v 
+    (implies (natp x)
+	     (equal (v-to-nat-big (nat-to-v-big x
+			                   (length-binary-nat x)))
+                    x))
+   :hints (("Goal" :induct (one-at-a-time x))))
+
 #||
 (defthm v-to-nat-of-nat-to-v
 	(implies (natp x)
 		 (equal (v-to-nat-big (nat-to-v-big x))
-			x))
-         :hints (("Goal" :induct (one-at-a-time x))))
+			x)))
 ||#
