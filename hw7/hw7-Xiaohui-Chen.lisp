@@ -53,7 +53,6 @@
                   1))
   :hints (("Goal" :induct (one-at-a-time x))))
 
-#||
 ;---------Small Endian Notation-----------
 ;uncomment this if necessary
 
@@ -71,7 +70,6 @@
       nil
     (cons (if (= (rem-2 x) 1) t nil)
 	  (nat-to-v (div-2 x) (1- l)))))
-||#
 
 
 ;------------Big Endian Noation-----------------
@@ -130,24 +128,9 @@
 	(implies (not (consp b))
 	         (equal (affix-v a b)
 		        (append a (list b)))))
-#||
-(defthm append-property 
-	(= (len (append a b))
-	    (+ (len a) (len b))))
 
 
-(defthm twice-number 
-	(implies (and (natp x)
-		      (> x 0))
-		 (= (len (nat-to-v-big (* x 2) 
-				(length-binary-nat (* x 2))))
-                    (+ 1 (len (nat-to-v-big x 
-				(length-binary-nat x)))))))
-||#
-
-;nat-to-v always return a true list
-
-;------Lemmas needed to prove v-to-nat-of-nat-to-v------
+;----Lemmas needed to prove v-to-nat-of-nat-to-v-big------
 
 ;nat-to-v always returns a true list
 (defthm true-listp-nat-to-v 
@@ -190,7 +173,7 @@
 ;Note: we are allowed to use full power of ACL2, so I use 
 ;:prove and :s commands here
 (DEFTHM
- V-TO-NAT-OF-NAT-TO-V-LEMMA1
+ V-TO-NAT-OF-NAT-TO-V-BIG-LEMMA1
  (IMPLIES
     (AND (NOT (ZP X))
          (EQUAL (V-TO-NAT-BIG (NAT-TO-V-BIG (DIV-2 X)
@@ -218,9 +201,31 @@
                          :PROVE :PROVE))
 
 ;The throrem to be proved
-(defthm v-to-nat-of-nat-to-v 
+(defthm v-to-nat-of-nat-to-v-big 
     (implies (natp x)
 	     (equal (v-to-nat-big (nat-to-v-big x
 			                   (length-binary-nat x)))
                     x)))
+
+;----Lemmas needed to prove v-to-nat-of-nat-to-v-big------
+
+(DEFTHM V-TO-NAT-OF-NAT-TO-V-LEMMA1
+     (IMPLIES (AND (NOT (ZP X))
+                   (EQUAL (V-TO-NAT (NAT-TO-V (DIV-2 X)
+                                              (LENGTH-BINARY-NAT (DIV-2 X))))
+                          (DIV-2 X))
+                   (<= 0 X)
+                   (NOT (EQUAL (REM-2 X) 1)))
+              (EQUAL (* 2 (DIV-2 X)) X))
+     :INSTRUCTIONS (:PROMOTE (:DV 1)
+                             (:REWRITE EVEN-MULTIPLY)
+                             :UP
+                             :S-PROP :S))
+
+(defthm v-to-nat-of-nat-to-v 
+    (implies (natp x)
+	     (equal (v-to-nat (nat-to-v x
+			             (length-binary-nat x)))
+                    x)))
+
 
