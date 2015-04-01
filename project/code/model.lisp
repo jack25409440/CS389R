@@ -20,11 +20,6 @@ For each state, the model is with the form
 		 (rationalp (cdr x))
 		 (>= (car x) (abs (cdr x))))))
 
-(defun good-quantumj (x)
-	(if (atom x)
-	    nil
-	    (>= (car x) (abs (cdr x)))))
-
 (defun true-jstate (a)
 	(if (atom a)
 	    (if (= a 0)
@@ -32,13 +27,13 @@ For each state, the model is with the form
 		nil)
 	    (and (rationalp (car a))
 	         (rational-pair (cdr a)))))
-
+#||
 (defun j-state (a j m_j)
       (declare (xargs :guard (and (rationalp a)
 				  (rationalp j)
 				  (rationalp m_j))))
       (cons a (cons j m_j)))
-
+||#
 
 (defun j-lowering (x)
 	(if (< (car (cdr x)) (abs (- (cdr (cdr x)) 1)))
@@ -115,13 +110,82 @@ For each state, the model is with the form
 
 (defun clean-up-zero (x)
 	(if (atom x)
-	    nil
-	    (if (= (car x) 0)
+	    0
+	    (if (equal (car x) 0)
 		(clean-up-zero (cdr x))
 	        (cons (car x)
 		      (clean-up-zero (cdr x))))))
 
-;TODO: verify l-lowering-valid and s-lowering-valid
+(defthm clean-up-zero-s-lowering-valid
+	(implies (good-quantumcoupled x)
+		 (good-quantumcoupled (clean-up-zero 
+					   (s-lowering x)))))
 
-;TODO: veriy the sum of coefficients of B,C,... equals to A
+(defthm clean-up-zero-l-lowering-valid 
+	(implies (good-quantumcoupled x)
+		 (good-quantumcoupled (clean-up-zero 
+					   (l-lowering x)))))
+
+;TODO: merge the same state
+
+	    
+
+;verify l-lowering-valid and s-lowering-valid
+
+(defthm l-lowering-valid 
+	(implies (good-quantumcoupled x)
+	         (good-quantumcoupled (clean-up-zero 
+					(l-lowering x)))))
+
+(defthm s-lowering-valid 
+	(implies (good-quantumcoupled x)
+		 (good-quantumcoupled (clean-up-zero 
+					 (s-lowering x)))))
+
+;Veriy the sum of coefficients of B,C,... equals to A
+
+(defun state-append (x y)
+	(if (atom x)
+	    y
+	    (if (atom y)
+		x
+	        (cons (car x) (state-append (cdr x) y)))))
+
+(defthm good-quantumcoupled-append 
+	(implies (and (good-quantumcoupled x)
+		      (good-quantumcoupled y))
+		 (good-quantumcoupled (state-append x y))))
+
+(defun sum-of-coefficients (x)
+    (if (atom x)
+	0
+	(+ (abs (car (car x)))
+	   (sum-of-coefficients (cdr x)))))
+
+(defun true-state (x)
+    (if (atom x)
+	nil
+	(and (true-jstate (car x))
+	     (good-quantumcoupled (cdr x))
+  	     (= (sum-of-coefficients (cdr x))
+		(abs (car (car x)))))))
+
+(defun state-lowering (x)
+	(if (atom x)
+	    0
+	    (cons (j-lowering (car x))
+		  (state-append (clean-up-zero 
+				   (l-lowering (cdr x)))
+			         (clean-up-zero
+				   (s-lowering (cdr x)))))))
+
+#||
+(defthm sum-equal 
+	(implies (true-state x)
+		 (true-state (state-lowering x)))) 
+||#
+
+;(state-lowering '((1 . (3/2 . 3/2)) . ((1 . ((1 . 1) . (1/2 . 1/2))))))
+
+;(state-lowering (state-lowering '((1 . (3/2 . 3/2)) . ((1 . ((1 . 1) . (1/2 . 1/2)))))))
 
