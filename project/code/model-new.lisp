@@ -63,7 +63,7 @@ For each state, the model is with the form
 	(cdr (cdr x)))
 
 (defun lower-or-lowest-jstate (x)
-	 (or (> (abs (quantum-mj x)) (quantum-j x))
+	 (or (>= (abs (quantum-mj x)) (quantum-j x))
 	     (equal (j-coefficient x) 0)))
 
 (defun half-or-full-integer (x)
@@ -113,8 +113,7 @@ For each state, the model is with the form
 (defthm lowest-j-state-property 
 	(implies (and (true-jstate x)
 		      (equal (- (quantum-mj x)) (quantum-j x)))
-		 (and (equal (+ (quantum-mj x) (quantum-j x)) 0)
-		      (< 0 (j-coefficient x)))))
+		 (equal (+ (quantum-mj x) (quantum-j x)) 0)))
 
 (defthm j-lowering-lemma1 
 	(implies (and (rationalp a)
