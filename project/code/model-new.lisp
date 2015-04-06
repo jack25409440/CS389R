@@ -51,7 +51,10 @@ For each state, the model is with the form
 		      (rationalp y)
 		      (equal x (- y)))
 		 (= (+ x y) 0)))
+
 ;-------------The j-state-------------------------------
+
+;-------------model-------------------------------------
 
 (defun j-coefficient (x) 
 	(car x))
@@ -63,7 +66,7 @@ For each state, the model is with the form
 	(cdr (cdr x)))
 
 (defun lower-or-lowest-jstate (x)
-	 (or (>= (abs (quantum-mj x)) (quantum-j x))
+	 (or (>= (- (quantum-mj x)) (quantum-j x))
 	     (equal (j-coefficient x) 0)))
 
 (defun half-or-full-integer (x)
@@ -215,11 +218,192 @@ For each state, the model is with the form
                              :TOP (:REWRITE INTEGER-TIMES-NUMERATOR)))
 
 
-
+;verify the j-lowering-operator is valid
 (defthm j-lowering-valid 
 	(implies (true-jstate x)
 	         (true-jstate (j-lowering-operator x)))
     :hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+
+;--------------Coupled state-------------------------
+
+;--------------Coupled model------------------------
+
+(defun first-coupled-state (x)
+	(car x))
+
+(defun first-coupled-coefficient (x)
+	(car (first-coupled-state x)))
+
+(defun first-coupled-l-state (x)
+	(car (cdr (first-coupled-state x))))
+
+(defun first-coupled-s-state (x)
+	(cdr (cdr (first-coupled-state x))))
+
+(defun first-coupled-l (x)
+	(car (first-coupled-l-state x)))
+
+(defun first-coupled-ml (x)
+	(cdr (first-coupled-l-state x)))
+
+(defun first-coupled-s (x)
+	(car (first-coupled-s-state x)))
+
+(defun first-coupled-ms (x)
+	(cdr (first-coupled-s-state x)))
+
+;------verify that a state is real coupled state-------
+
+(defun true-coupled-list (x)
+	(if (atom x)
+	    t
+	    (and (rationalp (first-coupled-coefficient x))
+		 (<= 0 (first-coupled-coefficient x))
+	         (rational-pair (first-coupled-l-state x))
+		 (rational-pair (first-coupled-s-state x))
+		 (true-coupled-list (cdr x)))))
+
+
+(defun true-coupled-state (x)
+	(if (atom x)
+	    (equal x 0)
+	    (true-coupled-list x)))
+	    
+;clean up 0s in the list
+
+(defun all-zeros (x)
+	(if (atom x)
+	    t
+	    (and (equal (car x) 0)
+		 (all-zeros (cdr x)))))
+
+(defun clean-up-zero-list (x) 
+	(if (atom x)
+	    0
+            (if (equal (car x) 0)
+		(clean-up-zero-list (cdr x))
+	        (cons (car x)
+		      (clean-up-zero-list (cdr x))))))
+
+(defun clean-up-zero (x)
+	(if (atom x)
+	    0
+	    (if (all-zeros x)
+		0
+	        (clean-up-zero-list x))))
+
+(defthm clean-up-zero-valid 
+	(implies (true-coupled-state x)
+		 (true-coupled-state (clean-up-zero x)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+
+;-------l-lowering-operator---------------------------
+
+(defun lower-or-lowest-l-state (x)
+	(or (equal (first-coupled-coefficient x) 0)
+	    (>= (- (first-coupled-ml x)) (first-coupled-l x))))
+
+
+(defun l-lowering-to-state (x)
+	(if (atom (first-coupled-state x))
+	    0 
+	    (if (lower-or-lowest-l-state x)
+		0
+		(cons (* (first-coupled-coefficient x)
+			 (+ (expt (first-coupled-l x) 2)
+			    (- (expt (first-coupled-ml x) 2))
+			    (first-coupled-l x)
+			    (first-coupled-ml x)))
+		      (cons (cons (first-coupled-l x)
+				  (- (first-coupled-ml x) 1)) 
+			    (first-coupled-s-state x)))))) 
+
+
+(defun l-lowering-operator-helper (x)
+	(if (atom x)
+	    nil
+	    (cons (l-lowering-to-state x) 
+		  (l-lowering-operator-helper (cdr x)))))
+
+(defun l-lowering-operator (x)
+	(if (atom x)
+	    0
+	    (clean-up-zero (l-lowering-operator-helper x))))
+
+(DEFTHM L-LOWERING-LEMMA1
+        (IMPLIES (AND (RATIONALP X)
+                      (RATIONALP Y)
+                      (< 0 X)
+                      (<= 0 Y)
+                      (<= Y X)
+                      (INTEGERP (+ X (- Y)))
+                      (EQUAL (DENOMINATOR X) 2)
+                      (EQUAL (DENOMINATOR Y) 2))
+                 (INTEGERP (+ X Y)))
+        :INSTRUCTIONS (:PROMOTE (:REWRITE REDUCE-INTEGERP-+ ((Z (+ X (- Y))))
+                                          T)
+                                (:DV 1)
+                                (:REWRITE |(+ (+ x y) z)|)
+                                :TOP
+                                (:USE (:INSTANCE OPPOSITE-ELIMINATE (A X)
+                                                 (B Y)))
+                                :PROMOTE (:FORWARDCHAIN 1)
+                                (:DV 1)
+                                (:= (* X 2))
+                                :TOP (:REWRITE INTEGER-TIMES-NUMERATOR)))
+
+
+;Remove the commend when finish
+#||
+(defthm l-lowering-valid 
+	(implies (true-coupled-state x)
+		 (true-coupled-state (l-lowering-operator x)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+||#
+
+;-------s-lowering-operator---------------------------
+
+(defun lower-or-lowest-s-state (x)
+	(or (equal (first-coupled-coefficient x) 0)
+	    (>= (- (first-coupled-ms x)) (first-coupled-s x))))
+
+
+(defun s-lowering-to-state (x)
+	(if (atom (first-coupled-state x))
+	    0 
+	    (if (lower-or-lowest-s-state x)
+		0
+		(cons (* (first-coupled-coefficient x)
+			 (+ (expt (first-coupled-s x) 2)
+			    (- (expt (first-coupled-ms x) 2))
+			    (first-coupled-s x)
+			    (first-coupled-ms x)))
+		      (cons (first-coupled-l-state x) 
+			    (cons (first-coupled-s x) 
+				  (- (first-coupled-ms x) 1))))))) 
+
+
+(defun s-lowering-operator-helper (x)
+	(if (atom x)
+	    nil
+	    (cons (s-lowering-to-state x) 
+		  (s-lowering-operator-helper (cdr x)))))
+
+(defun s-lowering-operator (x)
+	(if (atom x)
+	    0
+	    (clean-up-zero (s-lowering-operator-helper x))))
+
+(defthm s-lowering-valid 
+	(implies (true-coupled-state x)
+		 (true-coupled-state (s-lowering-operator x)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
 				remove-strict-inequalities 
 				remove-weak-inequalities))))
 
