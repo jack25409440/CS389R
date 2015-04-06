@@ -11,17 +11,52 @@ For each state, the model is with the form
 		    ...))
 ||#
 
-(local (include-book "arithmetic/top-with-meta" :dir :system))
+(local (include-book "arithmetic/inequalities" :dir :system))
+
+
+
+(defthm square-larger-positive
+        (implies (and (<= a b)
+		      (< 0 b)
+		      (< 0 a)
+		      (rationalp a)
+		      (rationalp b))
+		 (<= (* a a) (* b b)))
+  :hints (("Goal" :use *-preserves->=-for-nonnegatives)))
+
+(DEFTHM SQUARE-LARGER-NEGATIVE
+        (IMPLIES (AND (<= (- A) B)
+                      (< 0 B)
+                      (< A 0)
+                      (RATIONALP A)
+                      (RATIONALP B))
+                 (<= (* A A) (* B B)))
+        :INSTRUCTIONS (:PROMOTE (:REWRITE NOT)
+                                (:DV 1)
+                                (:DV 2)
+                                (:= (* (- A) (- A)))
+                                :UP (:REWRITE SQUARE-LARGER-POSITIVE)))
+
+
+
+(defthm square-larger 
+	(implies (and (<= (abs a) b)
+		      (< 0 b)
+		      (rationalp a)
+		      (rationalp b))
+		 (<= (* a a) (* b b))))
+
+;(local (include-book "arithmetic-5/top" :dir :system))
 
 ;definitions for the j-state
 
 (defun rational-pair (x)
-	(if (atom x)
-	    nil
+	(if (atom x) nil
 	    (and (rationalp (car x))
-		 (<= 0 (car x))
+		 (< 0 (car x))
 		 (rationalp (cdr x))
-		 (>= (car x) (abs (cdr x))))))
+		 (>= (car x) (cdr x))
+		 (>= (car x) (- (cdr x))))))
 
 (defun true-jstate (a)
 	(if (atom a)
@@ -29,6 +64,41 @@ For each state, the model is with the form
 	    (and (rationalp (car a))
 		 (< 0 (car a))
 	         (rational-pair (cdr a)))))
+
+
+(DEFTHM J-LOWERING-LEMMA1
+        (IMPLIES (AND (CONSP X)
+                      (RATIONALP (CAR X))
+                      (< 0 (CAR X))
+                      (CONSP (CDR X))
+                      (RATIONALP (CADR X))
+                      (< 0 (CADR X))
+                      (ACL2-NUMBERP (CDDR X))
+                      (<= (CDDR X) (CADR X))
+                      (RATIONALP (CDDR X))
+                      (< (- (CDDR X)) (CADR X)))
+                 (< 0 (+ (CADR X) (CDDR X))))
+        :INSTRUCTIONS (:PROMOTE :PROVE))
+
+
+(DEFTHM J-LOWERING-LEMMA2
+        (IMPLIES (AND (CONSP X)
+                      (RATIONALP (CAR X))
+                      (< 0 (CAR X))
+                      (CONSP (CDR X))
+                      (RATIONALP (CADR X))
+                      (< 0 (CADR X))
+                      (<= (CDDR X) (CADR X))
+                      (RATIONALP (CDDR X))
+                      (<= (- (CDDR X)) (CADR X)))
+                 (<= (* (CDDR X) (CDDR X))
+                     (* (CADR X) (CADR X))))
+        :INSTRUCTIONS (:SPLIT (:REWRITE NOT)
+                              (:DV 1)
+                              (:REWRITE SQUARE-LARGER)
+                              :PROVE))
+
+
 
 (defun j-lowering (x)
 	(if (<= (car (cdr x)) (- (cdr (cdr x))))
@@ -38,12 +108,46 @@ For each state, the model is with the form
 		        (* (cdr (cdr x)) (- (cdr (cdr x)) 1))))
 		  (cons (car (cdr x)) (- (cdr (cdr x)) 1)))))
 
-(defthm j-lowering-valid-lemma1 
+(defthm j-lowering-coefficient 
 	(implies (true-jstate x)
-		 (xor (equal (j-lowering x) 0)
-		     (< 0 (- (*  (car (cdr x)) (+ (car (cdr x)) 1))
-		        (* (cdr (cdr x)) (- (cdr (cdr x)) 1)))))))
-		 
+		 (<= (* (cddr x) (cddr x)) 
+		     (* (cadr x) (cadr x)))))
+
+(defthm inequality-property 
+	(implies (and (rationalp a)
+		      (rationalp b)
+		      (rationalp c)
+		      (rationalp d)
+		      (< 0 (+ c d))
+		      (<= b a))
+		 (< b (+ c d a))))
+
+(local (include-book "arithmetic-5/top" :dir :system))
+
+(DEFTHM J-LOWERING-LEMMA3
+        (IMPLIES (AND (CONSP X)
+                      (RATIONALP (CAR X))
+                      (< 0 (CAR X))
+                      (CONSP (CDR X))
+                      (RATIONALP (CADR X))
+                      (< 0 (CADR X))
+                      (RATIONALP (CDDR X))
+                      (<= (CDDR X) (CADR X))
+                      (< (- (CDDR X)) (CADR X)))
+                 (< (EXPT (CDDR X) 2)
+                    (+ (CADR X)
+                       (CDDR X)
+                       (EXPT (CADR X) 2))))
+        :INSTRUCTIONS (:PROMOTE (:REWRITE INEQUALITY-PROPERTY)
+                                (:REWRITE J-LOWERING-LEMMA1)
+                                (:= (<= (* (CDDR X) (CDDR X))
+                                        (* (CADR X) (CADR X))))
+                                (:REWRITE NOT)
+                                (:DV 1)
+                                (:REWRITE J-LOWERING-LEMMA2)
+                                :PROVE))
+
+
 
 (defthm j-lowering-valid
 	(implies (true-jstate x)
