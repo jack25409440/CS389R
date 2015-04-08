@@ -52,6 +52,18 @@ For each state, the model is with the form
 		      (equal x (- y)))
 		 (= (+ x y) 0)))
 
+(defthm sum-of-two-rationals 
+	(implies (and (rationalp a)
+		      (rationalp b))
+		 (rationalp (+ a b))))
+
+(defthm sum-of-two-non-negative-rationals 
+	(implies (and (rationalp a)
+		      (rationalp b)
+		      (<= 0 a)
+		      (<= 0 b))
+		 (<= 0 (+ a b))))
+
 ;-------------The j-state-------------------------------
 
 ;-------------model-------------------------------------
@@ -128,6 +140,11 @@ For each state, the model is with the form
 
 (local (include-book "arithmetic-5/top" :dir :system))
 
+(local (in-theory (disable |(+ x (if a b c))| 
+			   |(- (if a b c))|
+			   |(< (if a b c) x)| 
+			   |(< x (if a b c))|)))
+
 (DEFTHM J-LOWERING-LEMMA2
         (IMPLIES (AND (RATIONALP A)
                       (RATIONALP B)
@@ -184,38 +201,29 @@ For each state, the model is with the form
 		        (/ (+ (numerator x) (numerator y))
 			   (denominator x)))))
 
-(DEFTHM
-     J-LOWERING-LEMMA6
-     (IMPLIES (AND (CONSP X)
-                   (RATIONALP (CAR X))
-                   (<= 0 (CAR X))
-                   (CONSP (CDR X))
-                   (RATIONALP (CADR X))
-                   (< 0 (CADR X))
-                   (RATIONALP (CDDR X))
-                   (<= 0 (CDDR X))
-                   (INTEGERP (+ (CADR X) (- (CDDR X))))
-                   (<= (CDDR X) (CADR X))
-                   (NOT (INTEGERP (CADR X)))
-                   (EQUAL (DENOMINATOR (CADR X)) 2)
-                   (NOT (INTEGERP (CDDR X)))
-                   (EQUAL (DENOMINATOR (CDDR X)) 2)
-                   (NOT (EQUAL (CAR X) 0))
-                   (< (CDDR X) 1))
-              (INTEGERP (+ (CADR X) (CDDR X))))
-     :INSTRUCTIONS (:PROMOTE (:REWRITE REDUCE-INTEGERP-+
-                                       ((Z (+ (CADR X) (- (CDDR X)))))
-                                       T)
-                             (:DV 1)
-                             (:REWRITE |(+ (+ x y) z)|)
-                             :UP (:DV 1)
-                             :TOP
-                             (:USE (:INSTANCE OPPOSITE-ELIMINATE (A (CADR X))
-                                              (B (CDDR X))))
-                             :PROMOTE (:FORWARDCHAIN 1)
-                             (:DV 1)
-                             (:= (* (CADR X) 2))
-                             :TOP (:REWRITE INTEGER-TIMES-NUMERATOR)))
+
+(DEFTHM J-LOWERING-LEMMA6
+        (IMPLIES (AND (RATIONALP X)
+                      (RATIONALP Y)
+                      (< 0 X)
+                      (<= 0 Y)
+                      (<= Y X)
+                      (INTEGERP (+ X (- Y)))
+                      (EQUAL (DENOMINATOR X) 2)
+                      (EQUAL (DENOMINATOR Y) 2))
+                 (INTEGERP (+ X Y)))
+        :INSTRUCTIONS (:PROMOTE (:REWRITE REDUCE-INTEGERP-+ ((Z (+ X (- Y))))
+                                          T)
+                                (:DV 1)
+                                (:REWRITE |(+ (+ x y) z)|)
+                                :TOP
+                                (:USE (:INSTANCE OPPOSITE-ELIMINATE (A X)
+                                                 (B Y)))
+                                :PROMOTE (:FORWARDCHAIN 1)
+                                (:DV 1)
+                                (:= (* X 2))
+                                :TOP (:REWRITE INTEGER-TIMES-NUMERATOR)))
+
 
 
 ;verify the j-lowering-operator is valid
@@ -232,6 +240,9 @@ For each state, the model is with the form
 
 (defun first-coupled-state (x)
 	(car x))
+
+(defun first-coupled-state-pair (x)
+	(cdr (car x)))
 
 (defun first-coupled-coefficient (x)
 	(car (first-coupled-state x)))
@@ -255,6 +266,12 @@ For each state, the model is with the form
 	(cdr (first-coupled-s-state x)))
 
 ;------verify that a state is real coupled state-------
+
+(defun true-coupled-element (x)
+	(and (rationalp (car x))
+	     (<= 0 (car x))
+	     (rational-pair (car (cdr x)))
+	     (rational-pair (cdr (cdr x)))))
 
 (defun true-coupled-list (x)
 	(if (atom x)
@@ -293,13 +310,14 @@ For each state, the model is with the form
 	    (if (all-zeros x)
 		0
 	        (clean-up-zero-list x))))
-
+#||
 (defthm clean-up-zero-valid 
 	(implies (true-coupled-state x)
 		 (true-coupled-state (clean-up-zero x)))
 :hints (("Goal" :in-theory (disable same-denominator-add 
 				remove-strict-inequalities 
 				remove-weak-inequalities))))
+||#
 
 ;-------l-lowering-operator---------------------------
 
@@ -334,30 +352,8 @@ For each state, the model is with the form
 	    0
 	    (clean-up-zero (l-lowering-operator-helper x))))
 
-(DEFTHM L-LOWERING-LEMMA1
-        (IMPLIES (AND (RATIONALP X)
-                      (RATIONALP Y)
-                      (< 0 X)
-                      (<= 0 Y)
-                      (<= Y X)
-                      (INTEGERP (+ X (- Y)))
-                      (EQUAL (DENOMINATOR X) 2)
-                      (EQUAL (DENOMINATOR Y) 2))
-                 (INTEGERP (+ X Y)))
-        :INSTRUCTIONS (:PROMOTE (:REWRITE REDUCE-INTEGERP-+ ((Z (+ X (- Y))))
-                                          T)
-                                (:DV 1)
-                                (:REWRITE |(+ (+ x y) z)|)
-                                :TOP
-                                (:USE (:INSTANCE OPPOSITE-ELIMINATE (A X)
-                                                 (B Y)))
-                                :PROMOTE (:FORWARDCHAIN 1)
-                                (:DV 1)
-                                (:= (* X 2))
-                                :TOP (:REWRITE INTEGER-TIMES-NUMERATOR)))
 
-
-;Remove the commend when finish
+;Remove the comment when finish
 #||
 (defthm l-lowering-valid 
 	(implies (true-coupled-state x)
@@ -400,11 +396,150 @@ For each state, the model is with the form
 	    0
 	    (clean-up-zero (s-lowering-operator-helper x))))
 
+;Remove the comment when finish
+#||
+
 (defthm s-lowering-valid 
 	(implies (true-coupled-state x)
 		 (true-coupled-state (s-lowering-operator x)))
 :hints (("Goal" :in-theory (disable same-denominator-add 
 				remove-strict-inequalities 
 				remove-weak-inequalities))))
+||#
+
+;---------append and merge states--------------
+
+(defun delete-same (b y)
+	(if (atom y)
+	    nil
+	    (if (equal b (first-coupled-state-pair y))
+		(delete-same b (cdr y))
+		(cons (car y) (delete-same b (cdr y))))))
+	    
+(defthm delete-same-property 
+	(implies (and (rational-pair b)
+		      (true-coupled-state y)
+		      (not (atom y)))
+		 (true-coupled-state (delete-same b y)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+
+
+(defun merge-same (a y)
+	(if (atom y)
+	    a
+	    (if (equal (cdr a) (first-coupled-state-pair y))
+		(merge-same (cons (+ (car a) 
+		                     (first-coupled-coefficient y))
+			          (cdr a))
+			    (cdr y))
+		(merge-same a (cdr y)))))
+
+
+(defun all-non-negative-coefficient (x)
+	(if (atom x)
+	    t
+	    (and (<= 0 (first-coupled-coefficient x))
+		 (rationalp (first-coupled-coefficient x))
+		 (all-non-negative-coefficient (cdr x)))))
+
+(defthm true-coupled-list-property 
+	(implies (and (consp x)
+		      (true-coupled-state x))
+		 (all-non-negative-coefficient x))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+(defthm merge-same-property-1 
+	(implies (atom y)
+		 (equal (merge-same x y)
+			x)))
+
+
+(defthm merge-same-property-2
+	(implies (and (<= 0 (car x))
+		      (rationalp (car x))
+		      (all-non-negative-coefficient y))
+		 (rationalp (car (merge-same x y)))))
+
+(defthm merge-same-property-3 
+	(implies (and (<= 0 (car x))
+		      (rationalp (car x))
+		      (all-non-negative-coefficient y))
+		 (<= 0 (car (merge-same x y)))))
+
+(defthm merge-same-property-4 
+        (equal (cdr (merge-same x y))
+	       (cdr x)))
+
+(defthm merge-same-property 
+	(implies (and (true-coupled-element x)
+		      (true-coupled-state y)
+		      (not (atom y)))
+		 (true-coupled-element (merge-same x y)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+
+			
+
+(defun append-and-merge-states-helper (x y)
+	(if (atom x)
+	    y
+	    (cons (merge-same (first-coupled-state x) y) 
+		  (append-and-merge-states-helper (cdr x)
+		   (delete-same (first-coupled-state-pair x) y)))))
+
+(defun append-and-merge-states (x y)
+	(if (atom x)
+	    (if (atom y)
+		0
+		y)
+	    (if (atom y)
+		x
+		(append-and-merge-states-helper x y))))
+
+(defthm append-valid-lemma1
+	(implies (and (atom x)
+		      (not (atom x)))
+		 (equal (append-and-merge-states x y)
+			y)))
+
+
+
+(defthm append-valid-lemma2 
+	(implies (and (not (atom x))
+		      (atom y))
+		 (equal (append-and-merge-states x y)
+			x)))
+
+
+(defthm append-valid-lemma3
+	(implies (and (atom x)
+		      (atom y))
+		 (equal (append-and-merge-states x y)
+			0)))
+
+(defthm append-valid-lemma4 
+	(implies (and (consp x)
+		      (consp y))
+		 (equal (append-and-merge-states x y)
+			(append-and-merge-states-helper x y))))
+
+
+(local (in-theory (enable |(+ x (if a b c))| 
+			   |(- (if a b c))|
+			   |(< (if a b c) x)| 
+			   |(< x (if a b c))|)))
+
+(defthm append-valid
+        (implies (and (true-coupled-state x)
+		      (true-coupled-state y))
+	     (true-coupled-state (append-and-merge-states x y)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities
+				merge-same-property-4))))
 
 
