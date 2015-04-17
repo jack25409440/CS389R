@@ -140,10 +140,13 @@ For each state, the model is with the form
 
 (local (include-book "arithmetic-5/top" :dir :system))
 
+#||
 (local (in-theory (disable |(+ x (if a b c))| 
 			   |(- (if a b c))|
 			   |(< (if a b c) x)| 
 			   |(< x (if a b c))|)))
+||#
+
 
 (DEFTHM J-LOWERING-LEMMA2
         (IMPLIES (AND (RATIONALP A)
@@ -310,14 +313,13 @@ For each state, the model is with the form
 	    (if (all-zeros x)
 		0
 	        (clean-up-zero-list x))))
-#||
+
 (defthm clean-up-zero-valid 
 	(implies (true-coupled-state x)
 		 (true-coupled-state (clean-up-zero x)))
 :hints (("Goal" :in-theory (disable same-denominator-add 
 				remove-strict-inequalities 
 				remove-weak-inequalities))))
-||#
 
 ;-------l-lowering-operator---------------------------
 
@@ -354,14 +356,12 @@ For each state, the model is with the form
 
 
 ;Remove the comment when finish
-#||
 (defthm l-lowering-valid 
 	(implies (true-coupled-state x)
 		 (true-coupled-state (l-lowering-operator x)))
 :hints (("Goal" :in-theory (disable same-denominator-add 
 				remove-strict-inequalities 
 				remove-weak-inequalities))))
-||#
 
 ;-------s-lowering-operator---------------------------
 
@@ -397,7 +397,6 @@ For each state, the model is with the form
 	    (clean-up-zero (s-lowering-operator-helper x))))
 
 ;Remove the comment when finish
-#||
 
 (defthm s-lowering-valid 
 	(implies (true-coupled-state x)
@@ -405,22 +404,31 @@ For each state, the model is with the form
 :hints (("Goal" :in-theory (disable same-denominator-add 
 				remove-strict-inequalities 
 				remove-weak-inequalities))))
-||#
 
 ;---------append and merge states--------------
 
 (defun delete-same (b y)
 	(if (atom y)
-	    nil
+	    0
 	    (if (equal b (first-coupled-state-pair y))
 		(delete-same b (cdr y))
 		(cons (car y) (delete-same b (cdr y))))))
 	    
-(defthm delete-same-property 
-	(implies (and (rational-pair b)
+(defthm delete-same-property-1 
+	(implies (and (rational-pair (car b))
+		      (rational-pair (cdr b))
 		      (true-coupled-state y)
 		      (not (atom y)))
 		 (true-coupled-state (delete-same b y)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+
+(defthm delete-same-property-2
+	(implies (and (true-coupled-state y)
+		      (not (atom y))
+		      (not (true-coupled-list (delete-same x y))))
+		 (equal (delete-same x y) 0))
 :hints (("Goal" :in-theory (disable same-denominator-add 
 				remove-strict-inequalities 
 				remove-weak-inequalities))))
@@ -451,6 +459,7 @@ For each state, the model is with the form
 :hints (("Goal" :in-theory (disable same-denominator-add 
 				remove-strict-inequalities 
 				remove-weak-inequalities))))
+
 (defthm merge-same-property-1 
 	(implies (atom y)
 		 (equal (merge-same x y)
@@ -461,13 +470,23 @@ For each state, the model is with the form
 	(implies (and (<= 0 (car x))
 		      (rationalp (car x))
 		      (all-non-negative-coefficient y))
-		 (rationalp (car (merge-same x y)))))
+		 (rationalp (car (merge-same x y))))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+
+
+
 
 (defthm merge-same-property-3 
 	(implies (and (<= 0 (car x))
 		      (rationalp (car x))
 		      (all-non-negative-coefficient y))
-		 (<= 0 (car (merge-same x y)))))
+		 (<= 0 (car (merge-same x y))))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+
 
 (defthm merge-same-property-4 
         (equal (cdr (merge-same x y))
@@ -482,14 +501,15 @@ For each state, the model is with the form
 				remove-strict-inequalities 
 				remove-weak-inequalities))))
 
-			
 
 (defun append-and-merge-states-helper (x y)
 	(if (atom x)
 	    y
+	    (if (atom y)
+		nil
 	    (cons (merge-same (first-coupled-state x) y) 
 		  (append-and-merge-states-helper (cdr x)
-		   (delete-same (first-coupled-state-pair x) y)))))
+		  (delete-same (first-coupled-state-pair x) y))))))
 
 (defun append-and-merge-states (x y)
 	(if (atom x)
@@ -525,13 +545,21 @@ For each state, the model is with the form
 	(implies (and (consp x)
 		      (consp y))
 		 (equal (append-and-merge-states x y)
-			(append-and-merge-states-helper x y))))
+			(append-and-merge-states-helper x y)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
 
+(DEFTHM APPEND-VALID-LEMMA5
+        (IMPLIES (AND (CONSP X)
+                      (TRUE-COUPLED-LIST X)
+                      (CONSP Y)
+                      (TRUE-COUPLED-LIST Y))
+                 (CONSP (APPEND-AND-MERGE-STATES-HELPER X Y)))
+        :INSTRUCTIONS (:PROMOTE (:DV 1)
+                                :EXPAND :S-PROP
+                                :TOP :S-PROP))
 
-(local (in-theory (enable |(+ x (if a b c))| 
-			   |(- (if a b c))|
-			   |(< (if a b c) x)| 
-			   |(< x (if a b c))|)))
 
 (defthm append-valid
         (implies (and (true-coupled-state x)
@@ -540,6 +568,94 @@ For each state, the model is with the form
 :hints (("Goal" :in-theory (disable same-denominator-add 
 				remove-strict-inequalities 
 				remove-weak-inequalities
-				merge-same-property-4))))
+				default-less-than-1
+				default-less-than-2
+				default-plus-1
+				default-rational-denominator
+				|(+ x (if a b c))|
+				|(- (if a b c))|
+				|(< (if a b c) x)|
+				|(< x (if a b c))|
+				DEFAULT-MINUS
+				DEFAULT-PLUS-2))))
+
+;-----------------Quantum State----------------------
+
+(defun get-jstate (x)
+	(car x))
+
+(defun get-coupled-state (x)
+	(cdr x))
+
+(defun sum-of-coupled-coefficient (a)
+	(if (atom a)
+	    0
+	    (+ (first-coupled-coefficient a)
+	       (sum-of-coupled-coefficient (cdr a)))))
+
+(defun good-quantum-numbers-helper (x y)
+	(if (atom y)
+	    t
+	    (and (equal (quantum-j x)
+			(+ (first-coupled-l y)
+			   (first-coupled-s y)))
+		 (equal (quantum-mj x)
+			(+ (first-coupled-ml y)
+			   (first-coupled-ms y)))
+		 (good-quantum-numbers-helper x (cdr y)))))
+
+(defun good-quantum-numbers (x)
+	(if (and (equal (get-jstate x) 0)
+		 (equal (get-coupled-state x) 0))
+	    t
+	    (good-quantum-numbers-helper (get-jstate x) 
+					 (get-coupled-state x))))
+	
+
+(defun true-quantum-state (x)
+	(xor (and (equal (get-jstate x) 0)
+		  (equal (get-coupled-state x) 0))
+	     (and (true-jstate (get-jstate x))
+		  (true-coupled-state (get-coupled-state x))
+		  (equal (sum-of-coupled-coefficient 
+				(get-coupled-state x))
+			 (caar x)))))
+
+(defun normalize-helper (a y)
+	(if (atom y)
+	    nil
+	    (cons (cons (/ (first-coupled-coefficient y) a) 
+		        (first-coupled-state y))
+		  (normalize-helper a (cdr y)))))
+
+(defun normalize-state (x)
+	(if (and (equal (get-jstate x) 0)
+		 (equal (get-coupled-state x) 0))
+	    x
+	    (if (< 0 (car (get-jstate x)))
+	        (cons (cons '1 (cdr (get-jstate x)))
+		          (normalize-helper (car (get-jstate x)) 
+					(get-coupled-state x)))
+		(cons '0 '0))))	
+
+(I-AM-HERE)
+
+(defthm normalize-valid
+	(implies (true-quantum-state x)
+		 (true-quantum-state (normalize-state x)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities
+				default-less-than-1
+				default-less-than-2
+				default-plus-1
+				default-rational-denominator
+				|(+ x (if a b c))|
+				|(- (if a b c))|
+				|(< (if a b c) x)|
+				|(< x (if a b c))|
+				DEFAULT-MINUS
+				DEFAULT-PLUS-2))))
+
 
 
