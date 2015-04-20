@@ -964,6 +964,9 @@ For each state, the model is with the form
 	    (and (equal (car x) (car y))
 		 (equal-list (cdr x) (cdr y)))))
 
+(defthm all-same-property-1
+	(implies (all-same b y)
+		 (all-same b (cdr y))))
   
 (defthm delete-same-property-1 
 	(implies (and ;(rational-pair (car b))
@@ -993,6 +996,18 @@ For each state, the model is with the form
 				remove-weak-inequalities))))
 
 
+(defthm delete-same-property-3 
+	(implies (and (true-coupled-state y)
+		      (consp y)
+		      (not (all-same b y)))
+		 (equal (delete-same b y)
+			(delete-same-helper b y)))
+	:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+
+	 
+
 #||
 (defthm detele-same-property-3
 	(implies (and (true-coupled-list y)
@@ -1008,7 +1023,7 @@ For each state, the model is with the form
 
 
 
-(defthm detele-same-property-3
+(defthm detele-same-property-4
 	(implies (and (true-coupled-list y)
 		      (consp y)
 		      ;(rational-pair (car b))
@@ -1271,6 +1286,78 @@ For each state, the model is with the form
 		  (append-and-merge-states-helper (cdr x)
 		  (delete-same (first-coupled-state-pair x) y))))))
 
+(defthm append-and-merge-property-1
+	(implies (and (consp x)
+		      (true-coupled-list x))
+		      (true-coupled-element 
+				(first-coupled-state x)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+
+(defthm append-and-merge-property-2 
+	(implies (and (true-coupled-list x)
+		      (true-coupled-element a))
+		 (true-coupled-list (cons a x)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities))))
+
+
+(defthm append-and-merge-property-3
+	(true-coupled-list 0))
+
+
+(DEFTHM APPEND-AND-MERGE-PROPERTY-4
+        (IMPLIES (AND (CONSP X)
+                      (TRUE-COUPLED-LIST X)
+                      (CONSP Y)
+                      (TRUE-COUPLED-LIST Y))
+                 (TRUE-COUPLED-LIST (APPEND-AND-MERGE-STATES-HELPER X Y)))
+        :INSTRUCTIONS ((:INDUCT (APPEND-AND-MERGE-STATES-HELPER X Y))
+                       :PROMOTE :SPLIT (:DV 1)
+                       :EXPAND :S-PROP :TOP
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-2)
+                       (:USE APPEND-AND-MERGE-PROPERTY-1)
+                       :PROMOTE (:FORWARDCHAIN 1)
+                       (:DV 1)
+                       :EXPAND :S-PROP :EXPAND
+                       :S-PROP :TOP :SPLIT :EXPAND :S-PROP
+                       (:REWRITE DELETE-SAME-PROPERTY-1)
+                       (:REWRITE MERGE-SAME-PROPERTY)
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-1)
+                       (:DV 1)
+                       :EXPAND :S-PROP :TOP
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-2)
+                       (:REWRITE MERGE-SAME-PROPERTY)
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-1)
+                       (:DEMOTE 4)
+                       (:DV 1)
+                       :EXPAND :S-PROP :TOP :S-PROP (:DV 1)
+                       :EXPAND :S-PROP (:DV 2 2)
+                       (:REWRITE DELETE-SAME-PROPERTY-2)
+                       :UP :EXPAND :TOP :SPLIT
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-2)
+                       :EXPAND
+                       :S-PROP (:REWRITE MERGE-SAME-PROPERTY)
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-1)
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-2)
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-3)
+                       (:REWRITE MERGE-SAME-PROPERTY)
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-1)
+                       :EXPAND :S-PROP (:DV 1)
+                       :EXPAND :S-PROP (:DV 2)
+                       :EXPAND :S-PROP :TOP :SPLIT
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-2)
+                       :EXPAND
+                       :S-PROP (:REWRITE MERGE-SAME-PROPERTY)
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-1)
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-2)
+                       :EXPAND
+                       :S-PROP (:REWRITE MERGE-SAME-PROPERTY)
+                       (:REWRITE APPEND-AND-MERGE-PROPERTY-1)))
+
+
 (defun append-and-merge-states (x y)
 	(if (atom x)
 	    (if (atom y)
@@ -1321,7 +1408,6 @@ For each state, the model is with the form
                                 :EXPAND :S-PROP
                                 :TOP :S-PROP))
 
-#||
 (defthm append-valid
         (implies (and (true-coupled-state x)
 		      (true-coupled-state y))
@@ -1339,8 +1425,14 @@ For each state, the model is with the form
 				|(< x (if a b c))|
 				DEFAULT-MINUS
 				DEFAULT-PLUS-2
+			calculate-merge-coefficient
 			REDUCE-MULTIPLICATIVE-CONSTANT-EQUAL))))
-||#
+
+
+
+
+
+
 ;-----------------Quantum State----------------------
 
 (defun get-jstate (x)
@@ -1445,7 +1537,6 @@ For each state, the model is with the form
 				DEFAULT-MINUS
 				DEFAULT-PLUS-2))))
 
-(I-AM-HERE)
 ;-----------------Quantum Operator---------------
 
 (defun quantum-operator-helper (x)
@@ -1459,6 +1550,43 @@ For each state, the model is with the form
 		 (equal (get-coupled-state x) 0))
 	    x
 	    (quantum-operator-helper (normalize-state x))))
+
+(defun initial-quantum-state (x)
+	(and (equal (j-coefficient (get-jstate x)) 1)
+	     (equal (first-coupled-coefficient 
+			    (get-coupled-state x)) 
+		    1)
+	     (equal (len (get-coupled-state x)) 1)
+	     (equal (quantum-j (get-jstate x))
+		    (quantum-mj (get-jstate x)))
+	     (equal (first-coupled-l (get-coupled-state x))
+		    (first-coupled-ml (get-coupled-state x)))
+	     (equal (first-coupled-s (get-coupled-state x))
+		    (first-coupled-ms (get-coupled-state x)))
+	     (true-quantum-state x)))
+
+
+(defthm initial-quantum-state-valid 
+	(implies (initial-quantum-state x)
+		 (true-quantum-state x))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+			        remove-strict-inequalities 
+				remove-weak-inequalities))))
+
+(defthm initial-state-lemma-1
+	(implies (initial-quantum-state x)
+		 (not (initial-quantum-state 
+			   (quantum-operator x))))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+			        remove-strict-inequalities 
+				remove-weak-inequalities
+				calculate-merge-coefficient))))
+
+
+;TODO: Prove more lemmas on calculate-merge-coefficient
+	     
+
+(I-AM-HERE)
 
 (defthm quantum-operator-valid 
 	(implies (true-quantum-state x)
