@@ -115,7 +115,10 @@
 		 (pairs-same (cdr x) (cdr y)))))
 
 (defthm normalize-lemma4
-	(implies (true-quantum-state x)
+	(implies (and (true-quantum-state x)
+		      (not (equal (get-jstate x) 0))
+		      (not (equal (get-coupled-state x) 0))
+		      (< 0 (car (get-jstate x))))
 		 (and (equal (quantum-j 
 			       (get-jstate (normalize-state x)))
 		             (quantum-j 
@@ -128,7 +131,241 @@
 				remove-strict-inequalities 
 				remove-weak-inequalities))))
 
+(defthm normalize-lemma5
+	(implies (and (true-quantum-state x)
+		      (not (equal (get-jstate x) 0))
+		      (not (equal (get-coupled-state x) 0))
+		      (< 0 (car (get-jstate x))))
+		 (let ((a (get-coupled-state 
+				(normalize-state x)))
+		       (b (get-coupled-state x)))
+	    	  (pairs-same a b))) 	
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities)
+		:induct (pairs-same a b))))
 
+(defthm normalize-lemma6
+	(IMPLIES (AND (CONSP (CAR X))
+              (RATIONALP (CAAR X))
+              (<= 0 (CAAR X))
+              (CONSP (CDAR X))
+              (RATIONALP (CADAR X))
+              (< 0 (CADAR X))
+              (RATIONALP (CDDAR X))
+              (< (CDDAR X) 0)
+              (INTEGERP (+ (CADAR X) (CDDAR X)))
+              (<= (- (CDDAR X)) (CADAR X))
+              (NOT (INTEGERP (CADAR X)))
+              (EQUAL (DENOMINATOR (CADAR X)) 2)
+              (NOT (INTEGERP (CDDAR X)))
+              (EQUAL (DENOMINATOR (CDDAR X)) 2)
+              (CONSP (CDR X))
+              (TRUE-COUPLED-LIST (CDR X))
+              (EQUAL (SUM-OF-COUPLED-COEFFICIENT (CDR X))
+                     (CAAR X))
+              (EQUAL-J (CAR X) (CDR X))
+              (EQUAL-MJ (CAR X) (CDR X))
+              (< 0 (CAAR X)))
+	 (let ((a (cons 1 (cdar x)))
+	       (b (normalize-helper (caar x) (cdr x))))
+               (EQUAL-J a b)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities)
+		:induct (equal-j a b))))
+
+(defthm normalize-lemma7
+	(IMPLIES (AND (CONSP (CAR X))
+              (RATIONALP (CAAR X))
+              (<= 0 (CAAR X))
+              (CONSP (CDAR X))
+              (RATIONALP (CADAR X))
+              (< 0 (CADAR X))
+              (RATIONALP (CDDAR X))
+              (< (CDDAR X) 0)
+              (INTEGERP (+ (CADAR X) (CDDAR X)))
+              (<= (- (CDDAR X)) (CADAR X))
+              (NOT (INTEGERP (CADAR X)))
+              (EQUAL (DENOMINATOR (CADAR X)) 2)
+              (NOT (INTEGERP (CDDAR X)))
+              (EQUAL (DENOMINATOR (CDDAR X)) 2)
+              (CONSP (CDR X))
+              (TRUE-COUPLED-LIST (CDR X))
+              (EQUAL (SUM-OF-COUPLED-COEFFICIENT (CDR X))
+                     (CAAR X))
+              (EQUAL-J (CAR X) (CDR X))
+              (EQUAL-MJ (CAR X) (CDR X))
+              (< 0 (CAAR X)))
+	 (let ((a (cons 1 (cdar x)))
+	       (b (normalize-helper (caar x) (cdr x))))
+               (EQUAL-MJ a b)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities)
+		:induct (equal-j a b))))
+
+(defthm normalize-lemma8
+	(IMPLIES (AND (CONSP (CAR X))
+              (RATIONALP (CAAR X))
+              (<= 0 (CAAR X))
+              (CONSP (CDAR X))
+              (< 0 (CADAR X))
+              (< (CDDAR X) 0)
+              (<= (- (CDDAR X)) (CADAR X))
+              (INTEGERP (CADAR X))
+              (INTEGERP (CDDAR X))
+              (CONSP (CDR X))
+              (TRUE-COUPLED-LIST (CDR X))
+              (EQUAL (SUM-OF-COUPLED-COEFFICIENT (CDR X))
+                     (CAAR X))
+              (EQUAL-J (CAR X) (CDR X))
+              (EQUAL-MJ (CAR X) (CDR X))
+              (< 0 (CAAR X)))
+	 (let ((a (cons 1 (cdar x)))
+	       (b (normalize-helper (caar x) (cdr x))))
+               (EQUAL-MJ a b)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities)
+		:induct (equal-j a b))))
+
+(defthm normalize-lemma9
+	(IMPLIES (AND (CONSP (CAR X))
+              (RATIONALP (CAAR X))
+              (<= 0 (CAAR X))
+              (CONSP (CDAR X))
+              (< 0 (CADAR X))
+              (< (CDDAR X) 0)
+              (<= (- (CDDAR X)) (CADAR X))
+              (INTEGERP (CADAR X))
+              (INTEGERP (CDDAR X))
+              (CONSP (CDR X))
+              (TRUE-COUPLED-LIST (CDR X))
+              (EQUAL (SUM-OF-COUPLED-COEFFICIENT (CDR X))
+                     (CAAR X))
+              (EQUAL-J (CAR X) (CDR X))
+              (EQUAL-MJ (CAR X) (CDR X))
+              (< 0 (CAAR X)))
+	 (let ((a (cons 1 (cdar x)))
+	       (b (normalize-helper (caar x) (cdr x))))
+               (EQUAL-J a b)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities)
+		:induct (equal-j a b))))
+
+(defthm normalize-lemma10
+	(IMPLIES (AND (CONSP (CAR X))
+              (RATIONALP (CAAR X))
+              (<= 0 (CAAR X))
+              (CONSP (CDAR X))
+              (RATIONALP (CADAR X))
+              (< 0 (CADAR X))
+              (RATIONALP (CDDAR X))
+              (<= 0 (CDDAR X))
+              (INTEGERP (+ (CADAR X) (- (CDDAR X))))
+              (<= (CDDAR X) (CADAR X))
+              (NOT (INTEGERP (CADAR X)))
+              (EQUAL (DENOMINATOR (CADAR X)) 2)
+              (NOT (INTEGERP (CDDAR X)))
+              (EQUAL (DENOMINATOR (CDDAR X)) 2)
+              (CONSP (CDR X))
+              (TRUE-COUPLED-LIST (CDR X))
+              (EQUAL (SUM-OF-COUPLED-COEFFICIENT (CDR X))
+                     (CAAR X))
+              (EQUAL-J (CAR X) (CDR X))
+              (EQUAL-MJ (CAR X) (CDR X))
+              (< 0 (CAAR X)))
+	 (let ((a (cons 1 (cdar x)))
+	       (b (normalize-helper (caar x) (cdr x))))
+               (EQUAL-J a b)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities)
+		:induct (equal-j a b))))
+
+(defthm normalize-lemma11
+	(IMPLIES (AND (CONSP (CAR X))
+              (RATIONALP (CAAR X))
+              (<= 0 (CAAR X))
+              (CONSP (CDAR X))
+              (RATIONALP (CADAR X))
+              (< 0 (CADAR X))
+              (RATIONALP (CDDAR X))
+              (<= 0 (CDDAR X))
+              (INTEGERP (+ (CADAR X) (- (CDDAR X))))
+              (<= (CDDAR X) (CADAR X))
+              (NOT (INTEGERP (CADAR X)))
+              (EQUAL (DENOMINATOR (CADAR X)) 2)
+              (NOT (INTEGERP (CDDAR X)))
+              (EQUAL (DENOMINATOR (CDDAR X)) 2)
+              (CONSP (CDR X))
+              (TRUE-COUPLED-LIST (CDR X))
+              (EQUAL (SUM-OF-COUPLED-COEFFICIENT (CDR X))
+                     (CAAR X))
+              (EQUAL-J (CAR X) (CDR X))
+              (EQUAL-MJ (CAR X) (CDR X))
+              (< 0 (CAAR X)))
+	 (let ((a (cons 1 (cdar x)))
+	       (b (normalize-helper (caar x) (cdr x))))
+               (EQUAL-MJ a b)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities)
+		:induct (equal-j a b))))
+
+(defthm normalize-lemma12
+	(IMPLIES (AND (CONSP (CAR X))
+              (RATIONALP (CAAR X))
+              (<= 0 (CAAR X))
+              (CONSP (CDAR X))
+              (< 0 (CADAR X))
+              (<= 0 (CDDAR X))
+              (INTEGERP (+ (CADAR X) (- (CDDAR X))))
+              (<= (CDDAR X) (CADAR X))
+              (INTEGERP (CADAR X))
+              (INTEGERP (CDDAR X))
+              (CONSP (CDR X))
+              (TRUE-COUPLED-LIST (CDR X))
+              (EQUAL (SUM-OF-COUPLED-COEFFICIENT (CDR X))
+                     (CAAR X))
+              (EQUAL-J (CAR X) (CDR X))
+              (EQUAL-MJ (CAR X) (CDR X))
+              (< 0 (CAAR X)))
+	 (let ((a (cons 1 (cdar x)))
+	       (b (normalize-helper (caar x) (cdr x))))
+               (EQUAL-J a b)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities)
+		:induct (equal-j a b))))
+
+(defthm normalize-lemma13
+	(IMPLIES (AND (CONSP (CAR X))
+              (RATIONALP (CAAR X))
+              (<= 0 (CAAR X))
+              (CONSP (CDAR X))
+              (< 0 (CADAR X))
+              (<= 0 (CDDAR X))
+              (INTEGERP (+ (CADAR X) (- (CDDAR X))))
+              (<= (CDDAR X) (CADAR X))
+              (INTEGERP (CADAR X))
+              (INTEGERP (CDDAR X))
+              (CONSP (CDR X))
+              (TRUE-COUPLED-LIST (CDR X))
+              (EQUAL (SUM-OF-COUPLED-COEFFICIENT (CDR X))
+                     (CAAR X))
+              (EQUAL-J (CAR X) (CDR X))
+              (EQUAL-MJ (CAR X) (CDR X))
+              (< 0 (CAAR X)))
+	 (let ((a (cons 1 (cdar x)))
+	       (b (normalize-helper (caar x) (cdr x))))
+               (EQUAL-MJ a b)))
+:hints (("Goal" :in-theory (disable same-denominator-add 
+				remove-strict-inequalities 
+				remove-weak-inequalities)
+		:induct (equal-j a b))))
 
 (defthm normalize-valid
 	(implies (true-quantum-state x)
@@ -182,7 +419,6 @@
 :hints (("Goal" :in-theory (disable same-denominator-add 
 			        remove-strict-inequalities 
 				remove-weak-inequalities))))
-#||
 (defthm initial-state-lemma-1
 	(implies (initial-quantum-state x)
 		 (not (initial-quantum-state 
@@ -725,11 +961,124 @@
 				remove-weak-inequalities
 				calculate-merge-coefficient
 		FUNCTIONAL-COMMUTATIVITY-OF-MINUS-*-LEFT))))
-||#
+
+(DEFTHM
+ INITIAL-STATE-LEMMA-24
+ (IMPLIES
+  (AND (EQUAL (CAAR X) 1)
+       (EQUAL (CAADR X) 1)
+       (EQUAL (LEN (CDR X)) 1)
+       (EQUAL (CADAR X) (CDDAR X))
+       (EQUAL (CAADAR (CDR X))
+              (CDADAR (CDR X)))
+       (EQUAL (CADDAR (CDR X))
+              (CDDDAR (CDR X)))
+       (CONSP (CAR X))
+       (CONSP (CDAR X))
+       (RATIONALP (CADAR X))
+       (< 0 (CADAR X))
+       (NOT (INTEGERP (CADAR X)))
+       (EQUAL (DENOMINATOR (CADAR X)) 2)
+       (CONSP (CDR X))
+       (TRUE-COUPLED-LIST (CDR X))
+       (EQUAL (SUM-OF-COUPLED-COEFFICIENT (CDR X))
+              1)
+       (EQUAL-J (CAR X) (CDR X))
+       (EQUAL-MJ (CAR X) (CDR X))
+       (CONSP (L-LOWERING-OPERATOR-HELPER (CDR X)))
+       (CONSP (S-LOWERING-OPERATOR-HELPER (CDR X))))
+  (EQUAL
+   (SUM-OF-COUPLED-COEFFICIENT
+       (APPEND-AND-MERGE-STATES-HELPER (L-LOWERING-OPERATOR-HELPER (CDR X))
+                                       (S-LOWERING-OPERATOR-HELPER (CDR X))))
+   (* 2 (CADAR X))))
+ :INSTRUCTIONS
+ (:PROMOTE
+  (:DV 1 1)
+  :EXPAND :S-PROP (:DV 2)
+  (:DV 2)
+  (:IN-THEORY (DISABLE SAME-DENOMINATOR-ADD))
+  (:IN-THEORY (DISABLE |(- (* c x))|
+                       FUNCTIONAL-COMMUTATIVITY-OF-MINUS-*-LEFT))
+  :S (:DV 1)
+  (:IN-THEORY (DISABLE SAME-DENOMINATOR-ADD |(- (* c x))|
+                       FUNCTIONAL-COMMUTATIVITY-OF-MINUS-*-LEFT))
+  (:= NIL)
+  :UP :S-PROP :EXPAND :S-PROP (:DV 1)
+  (:= NIL)
+  :UP :S-PROP (:DV 2 2)
+  (:DV 1)
+  :EXPAND :S-PROP :UP (:REWRITE CDR-CONS)
+  :EXPAND (:= NIL)
+  :UP :EXPAND :S-PROP :UP (:DV 1 1)
+  :EXPAND :S-PROP :UP (:REWRITE CAR-CONS)
+  :UP :UP (:DV 1 1)
+  :EXPAND :S-PROP :UP (:REWRITE CDR-CONS)
+  :UP :EXPAND (:DV 1)
+  (:DV 1)
+  :EXPAND (:= NIL)
+  :UP :S-PROP :UP (:DV 1 1 1)
+  :EXPAND
+  :S-PROP :UP :EXPAND (:REWRITE CAR-CONS)
+  :UP :EXPAND :S-PROP (:DV 1)
+  (:= NIL)
+  :UP :S-PROP (:DV 2 1)
+  :EXPAND :S-PROP :UP (:REWRITE CDR-CONS)
+  :UP :EXPAND (:DV 1)
+  (:DV 1)
+  :EXPAND (:= NIL)
+  :UP
+  :S-PROP :UP :UP :EXPAND :S-PROP (:DV 1)
+  :EXPAND (:DV 1)
+  :EXPAND (:REWRITE CAR-CONS)
+  :EXPAND (:DV 1)
+  (:= T)
+  :UP :S-PROP (:DV 1)
+  (:= NIL)
+  :UP :S-PROP :UP (:REWRITE CAR-CONS)
+  (:= (* 2 (FIRST-COUPLED-L (CDR X))))
+  :UP (:DV 2)
+  :EXPAND (:DV 1 1)
+  (:REWRITE CDR-CONS)
+  :UP :S-PROP :UP :S-PROP (:DV 2)
+  (:DV 1)
+  :S :UP :S :UP
+  (:= (FIRST-COUPLED-COEFFICIENT (CDR (LIST (L-LOWERING-TO-STATE (CDR X))
+                                            (S-LOWERING-TO-STATE (CDR X))))))
+  (:DV 1)
+  (:REWRITE CDR-CONS)
+  :UP :EXPAND (:DV 1)
+  :EXPAND (:REWRITE CAR-CONS)
+  :EXPAND (:DV 1)
+  (:= T)
+  :UP :S-PROP (:DV 1)
+  (:= NIL)
+  :UP :S-PROP :UP (:REWRITE CAR-CONS)
+  (:= (* 2 (FIRST-COUPLED-S (CDR X))))
+  :UP
+  :TOP (:= T)))
+
+
+;change it to proof checker
+(defthm initial-state-lemma-25 
+	(implies (initial-quantum-state x)
+		 (equal (APPEND-AND-MERGE-STATES-HELPER 
+			  (L-LOWERING-OPERATOR-HELPER (CDR X))
+                          (S-LOWERING-OPERATOR-HELPER (CDR X)))
+			(list (l-lowering-operator-helper 
+				 (cdr x))
+			      (s-lowering-operator-helper
+				 (cdr x)))))
+	:hints (("Goal" :in-theory (disable same-denominator-add 
+			        remove-strict-inequalities 
+				remove-weak-inequalities
+				|(- (* c x))|
+		FUNCTIONAL-COMMUTATIVITY-OF-MINUS-*-LEFT))))
 
 
 
 
+;TODO Add more lemma here if necessary
 
 
 (defthm initial-state-lowering-valid 
@@ -743,6 +1092,8 @@
 			REDUCE-MULTIPLICATIVE-CONSTANT-EQUAL
 			REDUCE-MULTIPLICATIVE-CONSTANT-<
 		REDUCE-RATIONAL-MULTIPLICATIVE-CONSTANT-<))))
+
+(I-AM-HERE)
 	
 (skip-proofs
 (defun all-lowering-valid (x)
