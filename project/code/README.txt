@@ -13,4 +13,12 @@ For each state, the model is with the form
 
 Please use (ld "initialize.txt")
 
+test values:
 
+(quantum-operator '((1 . (3/2 . 3/2)) . ((1 . ((1 . 1) . (1/2 . 1/2))))))
+
+(quantum-operator (quantum-operator '((1 . (3/2 . 3/2)) . ((1 . ((1 . 1) . (1/2 . 1/2)))))))
+
+(quantum-operator (quantum-operator (quantum-operator '((1 . (3/2 . 3/2)) . ((1 . ((1 . 1) . (1/2 . 1/2))))))))
+
+(quantum-operator (quantum-operator (quantum-operator (quantum-operator '((1 . (3/2 . 3/2)) . ((1 . ((1 . 1) . (1/2 . 1/2)))))))))
