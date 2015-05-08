@@ -1,31 +1,31 @@
 \select@language {english}
-\contentsline {section}{Clebsch-Gordan Coefficient}{4}
-\contentsline {subsection}{Ket notation}{4}
-\contentsline {subsection}{The coefficient}{5}
-\contentsline {subsection}{Lowering-Operators}{7}
-\contentsline {subsection}{Example}{8}
-\contentsline {section}{My Model}{10}
-\contentsline {subsection}{Properties of Quantum States}{11}
-\contentsline {section}{My Implementation}{13}
-\contentsline {subsection}{j-state}{13}
-\contentsline {subsubsection}{Properties}{14}
-\contentsline {subsubsection}{J Lowering Operator}{17}
-\contentsline {subsubsection}{j-state Theorem}{18}
-\contentsline {subsection}{Coupled State}{19}
-\contentsline {subsubsection}{Properties}{19}
-\contentsline {subsubsection}{Clean up Zeros in the List}{23}
-\contentsline {subsubsection}{clean-up-zero Theorem}{24}
-\contentsline {subsubsection}{l-lowering-operator}{25}
-\contentsline {subsubsection}{l-lowering Theorem}{26}
-\contentsline {subsubsection}{s-lowering-operator}{27}
-\contentsline {subsubsection}{s-lowering Theorem}{28}
-\contentsline {subsection}{Merge and Append}{29}
-\contentsline {subsubsection}{Append and Merge Theorem}{31}
-\contentsline {subsection}{Quantum State}{32}
-\contentsline {subsubsection}{What is a real Quantum state}{34}
-\contentsline {subsection}{Normalize}{35}
-\contentsline {subsubsection}{Normalize Theorem}{36}
-\contentsline {subsection}{Quantum Operator}{37}
-\contentsline {subsection}{Initial State}{38}
-\contentsline {section}{Main Theorem 1}{39}
-\contentsline {section}{Main Theorem 2 (To be proved in the future)}{40}
+\contentsline {section}{Clebsch-Gordan Coefficient}{5}
+\contentsline {subsection}{Ket notation}{5}
+\contentsline {subsection}{The coefficient}{6}
+\contentsline {subsection}{Lowering-Operators}{8}
+\contentsline {subsection}{Example}{9}
+\contentsline {section}{My Model}{11}
+\contentsline {subsection}{Properties of Quantum States}{12}
+\contentsline {section}{My Implementation}{14}
+\contentsline {subsection}{j-state}{14}
+\contentsline {subsubsection}{Properties}{15}
+\contentsline {subsubsection}{J Lowering Operator}{18}
+\contentsline {subsubsection}{j-state Theorem}{19}
+\contentsline {subsection}{Coupled State}{20}
+\contentsline {subsubsection}{Properties}{20}
+\contentsline {subsubsection}{Clean up Zeros in the List}{24}
+\contentsline {subsubsection}{clean-up-zero Theorem}{25}
+\contentsline {subsubsection}{l-lowering-operator}{26}
+\contentsline {subsubsection}{l-lowering Theorem}{27}
+\contentsline {subsubsection}{s-lowering-operator}{28}
+\contentsline {subsubsection}{s-lowering Theorem}{29}
+\contentsline {subsection}{Merge and Append}{30}
+\contentsline {subsubsection}{Append and Merge Theorem}{32}
+\contentsline {subsection}{Quantum State}{33}
+\contentsline {subsubsection}{What is a real Quantum state}{35}
+\contentsline {subsection}{Normalize}{36}
+\contentsline {subsubsection}{Normalize Theorem}{37}
+\contentsline {subsection}{Quantum Operator}{38}
+\contentsline {subsection}{Initial State}{39}
+\contentsline {section}{Main Theorem 1}{40}
+\contentsline {section}{Main Theorem 2 (To be proved in the future)}{41}

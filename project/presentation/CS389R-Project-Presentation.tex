@@ -238,7 +238,7 @@ $|j,m_j\rangle$, $|l,m_l\rangle$ ,$|s,m_s\rangle$, etc
 
 $j,m_j,l,m_l,...$ are quantum numbers
 
-The Ket notation represents the state when the particle as the corresponding quantum numbers
+The Ket notation represents the state when the particle has the corresponding quantum numbers
 
 \clearpage
 
@@ -356,7 +356,7 @@ or
 
 \item $l,s$ can be integers or half-integers (with denominator 2)
 
-\item $m_l, m_s$ can be integers or haldf-integers
+\item $m_l, m_s$ can be integers or half-integers
 
 \item In my model, j-state and coupled-states are either both 0 or pairs and lists as shown in previous slides
 
@@ -725,14 +725,14 @@ $E= [(l+s)^2 - (m_l+m_s)^2 + l+s -m_l -m_s]* \frac{(2l)!(2s)!(l+s+m_l+m_s)!(l+s-
 
 \begin{lstlisting}[language=Lisp,breaklines=true]
 (defun normalize-state (x)
-	(if (and (equal (get-jstate x) 0)
-		 (equal (get-coupled-state x) 0))
-	    x
-	    (if (< 0 (car (get-jstate x)))
-	        (cons (cons '1 (cdr (get-jstate x)))
-		          (normalize-helper (car (get-jstate x)) 
-					(get-coupled-state x)))
-		(cons '0 '0))))	
+  (if (and (equal (get-jstate x) 0)
+	   (equal (get-coupled-state x) 0))
+      x
+      (if (< 0 (car (get-jstate x)))
+	  (cons (cons '1 (cdr (get-jstate x)))
+		(normalize-helper (car (get-jstate x)) 
+			      (get-coupled-state x)))
+	  (cons '0 '0))))	
 \end{lstlisting}
 
 

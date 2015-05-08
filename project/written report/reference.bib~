@@ -1,0 +1,18 @@
+@article{clebsch,
+  title={Clebsch-Gordan Coefficient},
+  author={Weisstein, Eric W},
+  year={2003},
+  publisher={Wolfram Research, Inc.}
+}
+
+@article{acl2,
+  title={Recursion and Induction},
+  author={J Strother Moore},
+  year={2008}
+}
+
+@article{merge-append,
+author={M. Tukerman},
+title = {The General Problem},
+year = {2005}
+}

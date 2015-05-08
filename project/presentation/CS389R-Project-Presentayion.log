@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.4.1)  26 APR 2015 20:33
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.4.1)  27 APR 2015 12:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -978,6 +978,62 @@ text indent by \l@... (toc, 2):  25.18501pt
 number indent by parent (toc, 2):  16.42499pt
 text indent calculated (toc, 2): 25.18501pt
 number indent calculated (toc, 2): 16.42499pt
+number indent by \l@... (toc, 3):  41.61002pt
+text indent by \l@... (toc, 3):  35.03995pt
+number indent by parent (toc, 3):  41.61002pt
+text indent calculated (toc, 3): 35.03995pt
+number indent calculated (toc, 3): 41.61002pt
+number indent by \l@... (toc, 2):  16.42499pt
+text indent by \l@... (toc, 2):  25.18501pt
+number indent by parent (toc, 2):  16.42499pt
+text indent calculated (toc, 2): 25.18501pt
+number indent calculated (toc, 2): 16.42499pt
+number indent by \l@... (toc, 3):  41.61002pt
+text indent by \l@... (toc, 3):  35.03995pt
+number indent by parent (toc, 3):  41.61002pt
+text indent calculated (toc, 3): 35.03995pt
+number indent calculated (toc, 3): 41.61002pt
+number indent by \l@... (toc, 2):  16.42499pt
+text indent by \l@... (toc, 2):  25.18501pt
+number indent by parent (toc, 2):  16.42499pt
+text indent calculated (toc, 2): 25.18501pt
+number indent calculated (toc, 2): 16.42499pt
+number indent by \l@... (toc, 3):  41.61002pt
+text indent by \l@... (toc, 3):  35.03995pt
+number indent by parent (toc, 3):  41.61002pt
+text indent calculated (toc, 3): 35.03995pt
+number indent calculated (toc, 3): 41.61002pt
+Missing character: There is no s in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no w in font nullfont!
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <9> on input line 28.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 28.
+[3]
+number indent by \l@... (toc, 2):  16.42499pt
+text indent by \l@... (toc, 2):  25.18501pt
+number indent by parent (toc, 2):  16.42499pt
+text indent calculated (toc, 2): 25.18501pt
+number indent calculated (toc, 2): 16.42499pt
+number indent by \l@... (toc, 2):  16.42499pt
+text indent by \l@... (toc, 2):  25.18501pt
+number indent by parent (toc, 2):  16.42499pt
+text indent calculated (toc, 2): 25.18501pt
+number indent calculated (toc, 2): 16.42499pt
+number indent by \l@... (toc, 1):  0.0pt
+text indent by \l@... (toc, 1):  16.42499pt
+number indent by parent (toc, 1):  0.0pt
+text indent calculated (toc, 1): 16.42499pt
+number indent calculated (toc, 1): 0.0pt
+number indent by \l@... (toc, 1):  0.0pt
+text indent by \l@... (toc, 1):  16.42499pt
+number indent by parent (toc, 1):  0.0pt
+text indent calculated (toc, 1): 16.42499pt
+number indent calculated (toc, 1): 0.0pt
 )
 \tf@toc=\write4
 \openout4 = `CS389R-Project-Presentayion.toc'.
@@ -988,20 +1044,7 @@ Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 226.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 226.
- [3]
-Missing character: There is no s in font nullfont!
-Missing character: There is no h in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no d in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no w in font nullfont!
- [4
-
-]
+ [4]
 Missing character: There is no s in font nullfont!
 Missing character: There is no h in font nullfont!
 Missing character: There is no a in font nullfont!
@@ -1010,7 +1053,16 @@ Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
  [5
 
-] <coordinate.jpg, id=40, 633.36626pt x 819.06pt>
+]
+Missing character: There is no s in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no w in font nullfont!
+ [6
+
+] <coordinate.jpg, id=43, 633.36626pt x 819.06pt>
 File: coordinate.jpg Graphic file (type jpg)
 
 <use coordinate.jpg>
@@ -1026,17 +1078,7 @@ Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
-[6 <./coordinate.jpg>]
-Missing character: There is no s in font nullfont!
-Missing character: There is no h in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no d in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no w in font nullfont!
- [7
-
-
-]
+[7 <./coordinate.jpg>]
 Missing character: There is no s in font nullfont!
 Missing character: There is no h in font nullfont!
 Missing character: There is no a in font nullfont!
@@ -1045,6 +1087,7 @@ Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
  [8
 
+
 ]
 Missing character: There is no s in font nullfont!
 Missing character: There is no h in font nullfont!
@@ -1052,7 +1095,16 @@ Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
- [9]
+ [9
+
+]
+Missing character: There is no s in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no w in font nullfont!
+ [10]
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2013/08/26 1.5b listings language file
 )
@@ -1061,15 +1113,6 @@ File: lstlang2.sty 2013/08/26 1.5b listings language file
 )
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
 (Font)              Font shape `T1/lmss/m/sl' tried instead on input line 327.
-Missing character: There is no s in font nullfont!
-Missing character: There is no h in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no d in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no w in font nullfont!
- [10
-
-]
 Missing character: There is no s in font nullfont!
 Missing character: There is no h in font nullfont!
 Missing character: There is no a in font nullfont!
@@ -1085,17 +1128,17 @@ Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
+ [12
 
-[12]
+]
 Missing character: There is no s in font nullfont!
 Missing character: There is no h in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
- [13
 
-]
+[13]
 Missing character: There is no s in font nullfont!
 Missing character: There is no h in font nullfont!
 Missing character: There is no a in font nullfont!
@@ -1111,7 +1154,9 @@ Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
- [15]
+ [15
+
+]
 Missing character: There is no s in font nullfont!
 Missing character: There is no h in font nullfont!
 Missing character: There is no a in font nullfont!
@@ -1119,6 +1164,13 @@ Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
  [16]
+Missing character: There is no s in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no w in font nullfont!
+ [17]
 LaTeX Font Info:    Try loading font information for OMS+lmss on input line 435
 .
 LaTeX Font Info:    No file OMSlmss.fd. on input line 435.
@@ -1134,16 +1186,7 @@ Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
-[17
-
-]
-Missing character: There is no s in font nullfont!
-Missing character: There is no h in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no d in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no w in font nullfont!
- [18
+[18
 
 ]
 Missing character: There is no s in font nullfont!
@@ -1161,14 +1204,7 @@ Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
- [20]
-Missing character: There is no s in font nullfont!
-Missing character: There is no h in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no d in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no w in font nullfont!
- [21
+ [20
 
 ]
 Missing character: There is no s in font nullfont!
@@ -1177,16 +1213,23 @@ Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
- [22]
+ [21]
 Missing character: There is no s in font nullfont!
 Missing character: There is no h in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
- [23
+ [22
 
 ]
+Missing character: There is no s in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no w in font nullfont!
+ [23]
 Missing character: There is no s in font nullfont!
 Missing character: There is no h in font nullfont!
 Missing character: There is no a in font nullfont!
@@ -1241,11 +1284,16 @@ Missing character: There is no w in font nullfont!
  [29
 
 ]
+Missing character: There is no s in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no w in font nullfont!
+ [30
 
-LaTeX Warning: Citation `Clebsch' on page 30 undefined on input line 648.
-
-
-Overfull \hbox (4.31506pt too wide) in paragraph at lines 648--649
+]
+Overfull \hbox (4.12057pt too wide) in paragraph at lines 648--649
 []$\OML/lmm/m/it/10 E \OT1/lmr/m/n/10 (-20) = [(\OML/lmm/m/it/10 l \OT1/lmr/m/n
 /10 (-20) + \OML/lmm/m/it/10 s\OT1/lmr/m/n/10 (-20) )[] \OMS/lmsy/m/n/10 ^^@ \O
 T1/lmr/m/n/10 (-20) (\OML/lmm/m/it/10 m[] \OT1/lmr/m/n/10 (-20) + \OML/lmm/m/it
@@ -1261,16 +1309,7 @@ Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
-[30
-
-]
-Missing character: There is no s in font nullfont!
-Missing character: There is no h in font nullfont!
-Missing character: There is no a in font nullfont!
-Missing character: There is no d in font nullfont!
-Missing character: There is no o in font nullfont!
-Missing character: There is no w in font nullfont!
- [31
+[31
 
 ]
 Missing character: There is no s in font nullfont!
@@ -1300,17 +1339,13 @@ Missing character: There is no w in font nullfont!
  [34
 
 ]
-Overfull \hbox (29.10622pt too wide) in paragraph at lines 734--735
-[][] 
- []
-
 Missing character: There is no s in font nullfont!
 Missing character: There is no h in font nullfont!
 Missing character: There is no a in font nullfont!
 Missing character: There is no d in font nullfont!
 Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
-[35
+ [35
 
 ]
 Missing character: There is no s in font nullfont!
@@ -1357,30 +1392,33 @@ Missing character: There is no o in font nullfont!
 Missing character: There is no w in font nullfont!
  [40
 
-] (./CS389R-Project-Presentayion.bbl) [41
+]
+Missing character: There is no s in font nullfont!
+Missing character: There is no h in font nullfont!
+Missing character: There is no a in font nullfont!
+Missing character: There is no d in font nullfont!
+Missing character: There is no o in font nullfont!
+Missing character: There is no w in font nullfont!
+ [41
 
 ]
+(./CS389R-Project-Presentayion.bbl) [42
 
+] 
 AED: lastpage setting LastPage
-[42
+[43
 
 ] (./CS389R-Project-Presentayion.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
  ) 
 Here is how much of TeX's memory you used:
- 17270 strings out of 495028
- 306372 string characters out of 6181498
- 483885 words of memory out of 5000000
- 20068 multiletter control sequences out of 15000+600000
- 92370 words of font info for 106 fonts, out of 8000000 for 9000
+ 17274 strings out of 495028
+ 306452 string characters out of 6181498
+ 484428 words of memory out of 5000000
+ 20070 multiletter control sequences out of 15000+600000
+ 92471 words of font info for 107 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  65i,18n,71p,595b,2121s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
@@ -1399,10 +1437,10 @@ fonts/type1/public/lm/lmsso10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy1
 0.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy7.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on CS389R-Project-Presentayion.pdf (42 pages, 271868 bytes).
+Output written on CS389R-Project-Presentayion.pdf (43 pages, 272830 bytes).
 PDF statistics:
- 228 PDF objects out of 1000 (max. 8388607)
- 160 compressed objects within 2 object streams
+ 232 PDF objects out of 1000 (max. 8388607)
+ 163 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  23588 words of extra memory for PDF output out of 24883 (max. 10000000)
 
